@@ -1,25 +1,27 @@
-Ingredient.create(name: 'Light rum')
-Ingredient.create(name: 'Gin')
-Ingredient.create(name: 'Dark rum')
-Ingredient.create(name: 'Sweet Vermouth')
-Ingredient.create(name: 'Strawberry schnapps')
-Ingredient.create(name: 'Scotch')
-Ingredient.create(name: 'Brandy')
-Ingredient.create(name: 'Triple sec')
-Ingredient.create(name: 'Southern comfort')
-Ingredient.create(name: 'tea')
-Ingredient.create(name: 'Champagne')
-Ingredient.create(name: 'Amaretto')
-Ingredient.create(name: 'Dry Vermouth')
-Ingredient.create(name: 'Coffee liqueur')
-Ingredient.create(name: 'Bourbon')
-Ingredient.create(name: 'Tequila')
-Ingredient.create(name: 'Vodka')
-Ingredient.create(name: 'Bitters')
-Ingredient.create(name: 'Sugar')
-Ingredient.create(name: 'Kahlua')
-Ingredient.create(name: 'Watermelon')
-Ingredient.create(name: 'Lime')
-Ingredient.create(name: 'Bitters')
-Ingredient.create(name: 'lemon')
-Ingredient.create(name: 'strawberry')
+require 'open-url'
+require 'json'
+
+url = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a'
+data = JSON.parse(open(url).read)
+
+data['drinks'].each do |drink|
+    cocktail = Cocktail.create(name: drink['strDrink'])
+    cocktail.save
+    (0..15).each do |num|
+      next if drink["strIngredient#{num}"].nil?
+
+      ingredient_name = drink["strIngredient#{num}"]
+      dose_description = drink["strMeasure#{num}"]
+
+      ingredient = Ingredient.new(name: ingredient_name)
+      ingredient.saveing
+      ingredient = Ingredient.find_by(name: ingredient_name)
+
+      dose = Dose.new(description: dose_description)
+
+      dose.ingredient = ingredient
+      dose.cocktail = cocktail
+      dose.save
+    end
+  end
+
