@@ -1,6 +1,15 @@
 <div class="banner" style="background-image: >
   <div class="banner-content">
     <h1>Felicitys Cocktails </h1>
-    <p>Awesome cocktails for all hours of the day  🥳</p>
+    <p>🥳Awesome cocktails for all hours of the day 🥳</p>
     <%= link_to "Add a cocktail", new_cocktail_path, class: "btn btn-primary btn-lg" %>
+    <div class ="card">
+      <ul>
+        <% @cocktails.each do |cocktail| %>
+        <%= link_to cocktail.name, cocktail_path(cocktail.id) %>
+        <%= image_tag "Header.png", alt: "cocktails and fruit", height: 300, widthL 400, crop: :fill %>
+      </ul>
+
+
+
   </div>
